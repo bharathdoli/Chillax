@@ -1,0 +1,16 @@
+.MovieDetail {
+    background-color: black;
+    color: white;
+    padding: 20px;
+  }
+  
+  .MovieDetail img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .MovieDetail p {
+    margin-top: 20px;
+    line-height: 1.6;
+  }
+  

@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 
@@ -9,14 +9,16 @@ function Home() {
   const [popular, setPopular] = useState([]);
   const [upComing, setUpComing] = useState([]);
 
-  const options = {
+  // Memoizing the options object to avoid re-creation on each render
+  const options = useMemo(() => ({
     method: 'GET',
     headers: {
       accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODRiNGI1MmViMmJmZWMzMjZmYzYyZTVmNmFkNzBkNCIsIm5iZiI6MTcyNTIxNzI3My4xNjc3MzEsInN1YiI6IjY2ZDRiN2Q2ODI4YjdlMTM0MDMwMDQ4NSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.gFpXJ3FqIhiNJ0iVSUBnIKxDfd7Z2pbCm54d1DSkAPM'
-    }
-  };
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODRiNGI1MmViMmJmZWMzMjZmYzYyZTVmNmFkNzBkNCIsIm5iZiI6MTcyNTIxNzI3My4xNjc3MzEsInN1YiI6IjY2ZDRiN2Q2ODI4YjdlMTM0MDMwMDQ4NSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.gFpXJ3FqIhiNJ0iVSUBnIKxDfd7Z2pbCm54d1DSkAPM',
+    },
+  }), []); // Empty dependency array ensures options is only created once
 
+  // Using useEffect to fetch movie data
   useEffect(() => {
     // Fetch now playing movies
     fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1', options)
@@ -30,17 +32,20 @@ function Home() {
       .then(data => setTopRated(data.results))
       .catch(err => console.error('Error fetching top rated movies:', err));
 
-      fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1', options)
+    // Fetch popular movies
+    fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1', options)
       .then(response => response.json())
       .then(data => setPopular(data.results))
-      .catch(err => console.error('Error fetching top rated movies:', err));
+      .catch(err => console.error('Error fetching popular movies:', err));
 
-      fetch('https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1', options)
+    // Fetch upcoming movies
+    fetch('https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1', options)
       .then(response => response.json())
       .then(data => setUpComing(data.results))
-      .catch(err => console.error('Error fetching top rated movies:', err));
-  }, []); // Empty dependency array to run only once when the component mounts
+      .catch(err => console.error('Error fetching upcoming movies:', err));
+  }, [options]); // `options` is now a dependency, ensuring that it is used
 
+  // Navigate to movie details page when card is clicked
   const handleCardClick = (id) => {
     navigate(`/movie/${id}`);
   };

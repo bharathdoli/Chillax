@@ -17,6 +17,8 @@ function Footer() {
               <li><a href="/about" className="text-white">About</a></li>
               <li><a href="/" className="text-white">Movies</a></li>
               <li><a href="/" className="text-white">TV Shows</a></li>
+              <li><a href="/login" className="text-white">Login</a></li>
+              <li><a href="/register" className="text-white">Register</a></li>
             </ul>
           </div>
           <div className="col-md-4">
